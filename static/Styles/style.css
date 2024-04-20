@@ -1,0 +1,87 @@
+body{
+    font-family: Arial;
+    background-color: #6c6bda;
+}
+
+.main-content{
+    background-color: blanchedalmond;
+    width:600px;
+    /* what is paddling doing
+    padding is the space between the content and the border
+    */ 
+    padding: 20px;
+    position: absolute;
+    /* what are some other position values
+    relative, fixed, absolute, static
+    */
+    /*what are those values doing
+    relative: relative to its normal position
+    fixed: relative to the browser window
+    absolute: relative to its first positioned parent
+    static: default value, not relative to anything
+    */
+    top:28%;
+    left:70%;
+    transform:translate(-50%,-50%);
+    color:blueviolet
+
+    
+    
+}
+
+h1{
+    text-transform: uppercase ;
+}
+
+.Login{
+    background-color: white;
+    width:400px;
+    padding: 30px;
+    /* move the login box to the center of the screen */
+    position: absolute;
+    top:80%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    box-shadow: 10px 10px 20px #00000080;
+    /* x-offset, y-offset, blur, color */
+    text-align: center;
+}
+
+.Login input{
+    display:block;
+    margin:20px auto;
+    text-align: center;
+    background: none;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 22px;
+    outline: none;
+    color:black;
+}
+
+.Login input[type="text"], input[type = "password"]{
+    border: 2px solid black;
+    width:220px;
+}
+
+.Login input[type = "submit"]{
+    width: 150px;
+    border: 2px solid greenyellow;
+    cursor: pointer;
+}
+
+.Login input[type="text"]:focus, input[type = "password"]:focus{
+    border-color:#2ecc71;
+    width: 280px;
+    transition:0.5s;
+}
+
+.Login input[type = "submit"]:hover{
+    background-color: #2ecc71;
+    transition: 0.5s;
+}
+
+/* when input text and input password fields are not empty, the submit button will be green */
+.Login input[type = "text"]:not(:placeholder-shown):not(:focus), input[type = "password"]:not(:placeholder-shown):not(:focus){
+    border-color: #2ecc71;
+}
