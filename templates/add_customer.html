@@ -1,10 +1,73 @@
+<!-- Adding customer account page -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Customer Registration</title>
+    </head>
+    <body>
+        {% extends 'base.html'%}   <!-- 网页上方菜单栏引用，每个页面必须有    BAR Menu Reference -->
+        {% block content %}        <!-- Start From Here -->
+
+            {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+
+            <!-- If the Customer account is added or if username is not empty -->
+            {% if username %}
+                <h1> Customer Added  </h1>
+                <h2> You can keep Adding Customer</h2>
+            {% else %} <!-- First time Entry, no cache or value in username -->
+                <h1> Register new Customer account here </h1>
+            {% endif %}
+                <br/>
+            <!-- 这个block是提交信息的框  -->
+                <!-- border style  -->
+                <div class="shadow p-3 mb-5 bg-body rounded"> <!-- 外观代码 -->
+                    <form method='POST'>
+                        {{ form.hidden_tag() }} <!-- CRSF security token -->
+                        {{ form.customerAccount.label(class="form-label") }} <!-- Label for the Customer Account field -->
+                        {{ form.customerAccount(class="form-control") }} <!-- Customer Account Input field -->
+                        <br/>
+                        {{ form.customerPassword.label(class="form-label") }} <!-- Label for the Customer Password field -->
+                        {{ form.customerPassword(class="form-control") }} <!-- Customer password Input field -->
+                        <br/>
+                        {{ form.submit(class="btn btn-secondary")}} <!-- Submit button -->
+                    </form>
+                </div>
+                <br/><br/><br/>
+            <!-- 这部分是网页下方表格， Table Displays existing data in the table  -->
+                <table class="table table-hover table-bordered table-striped">
+                    <!-- Header -->
+                    <tr>
+                        <th>customer_id</th>
+                        <th>username (Click Username to Change Login Credentials)</th>
+                        <th>password</th>
+                        <th>operation</th>
+                    </tr>
+                    <!-- For loop that displays each row of the data -->
+                    {% for existing_customerAccount in existing_customerAccounts %}
+                    <tr>
+                        <td>{{ existing_customerAccount.customer_id }}</td>
+                        <td><a href = "{{url_for('updateCustomerAccount', id=existing_customerAccount.customer_id)}}">{{ existing_customerAccount.username }}</a></td>
+                        <td>{{ existing_customerAccount.password }}</td>
+                        <!-- A button for delete -->                                                           <!-- Botton Name  -->
+                        <td><a href = "{{url_for('deleteCustomerAccount', id=existing_customerAccount.customer_id)}}">DELETE</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <!-- Create a Button that output json of the table -->
+            <button onclick="viewCustomerAccountsJSON()" class="btn btn-primary">View Customer Accounts in JSON</button>
+            <script>
+                function viewCustomerAccountsJSON() {
+                    // Redirects the user to the '/customerAccount/data' route
+                    window.location.href = "{{ url_for('customer_accounts_data') }}";
+                }
+            </script>
+            <!-- ends -->
+        {% endblock %}
+    </body>
 </html>

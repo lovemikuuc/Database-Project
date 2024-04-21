@@ -1,10 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>UpdateCustomerAccount</title>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Customer Account Details Update Page</title>
+    </head>
+    <body>
+    {% extends 'base.html'%}
+    {% block content %}
 
-</body>
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+
+        {% if username %}
+            <h1> Customer Account Details Updated  </h1>
+            <br/><br/><br/>
+            <table class="table table-hover table-bordered table-striped">
+                <tr>
+                    <th>customer_id</th>
+                    <th>username (Click Username to Change Login Credentials)</th>
+                    <th>password</th>
+                    <th>operation</th>
+                </tr>
+                {% for existing_customerAccount in existing_customerAccounts %}
+                <tr>
+                    <td>{{ existing_customerAccount.customer_id }}</td>
+                    <td><a href = "{{url_for('updateCustomerAccount', id=existing_customerAccount.customer_id)}}">{{ existing_customerAccount.username }}</a></td>
+                    <td>{{ existing_customerAccount.password }}</td>
+                    <td><a href = "{{url_for('deleteCustomerAccount', id=existing_customerAccount.customer_id)}}">DELETE</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+
+        {% else %}
+            <h1> Update Account Details Here </h1>
+            {% if id == 0 %}
+                <!-- do nothing here, just see the table-->
+            {% else %}
+                <h2> You are updating Username: {{ name_to_update.username}}</h2>
+                <br/>
+                <div class="shadow p-3 mb-5 bg-body rounded">
+                    <form action = "/customerAccount/update_{{id}}" method = 'POST'>
+                        {{ form.hidden_tag() }}
+
+                        {{ form.customerAccount.label(class="form-label") }}
+                        {{ form.customerAccount(class="form-control", value = name_to_update.username) }}
+                        <br/>
+                        {{ form.customerPassword.label(class="form-label") }}
+                        {{ form.customerPassword(class="form-control", value = name_to_update.password) }}
+                        <br/>
+                        {{ form.submit(class="btn btn-secondary")}} <!-- submit button-->
+                        <!-- delete button-->
+                        <a href="{{url_for('deleteCustomerAccount', id=id)}}" class="btn btn-danger">Delete</a>
+                    </form>
+                </div>
+            {% endif %}
+        <br/><br/><br/>
+        <!-- table setup-->
+        <table class="table table-hover table-bordered table-striped">
+            <tr>
+                <th>customer_id</th>
+                <th>username (Click Username to Change Login Credentials)</th>
+                <th>password</th>
+                <th>operation</th>
+            </tr>
+            {% for existing_customerAccount in existing_customerAccounts %}
+                <tr>
+                    <td>{{ existing_customerAccount.customer_id }}</td>
+                    <td> <a href = "{{url_for('updateCustomerAccount', id=existing_customerAccount.customer_id)}}">{{ existing_customerAccount.username }}</a></td>
+                    <td>{{ existing_customerAccount.password }}</td>
+                    <td><a href = "{{url_for('deleteCustomerAccount', id=existing_customerAccount.customer_id)}}">DELETE</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <button onclick="viewCustomerAccountsJSON()" class="btn btn-primary">View Customer Accounts in JSON</button>
+        <script>
+            function viewCustomerAccountsJSON() {
+                // Redirects the user to the '/customerAccount/data' route
+                window.location.href = "{{ url_for('customer_accounts_data') }}";
+            }
+        </script>
+
+
+
+        {% endif %}
+
+    {% endblock %}
+    </body>
 </html>

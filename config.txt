@@ -1,0 +1,7 @@
+{
+    "host" : "164.90.137.194:3306",
+    "user" : "diz21",
+    "password": "InfSci2710_4600049",
+    "db": "mtc",
+    "charset": "utf8mb4"
+}=

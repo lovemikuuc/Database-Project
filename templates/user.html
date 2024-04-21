@@ -1,11 +1,15 @@
+<!-- NOT RELATE to DATABASE -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Hello {{name|capitalize}}</title>
-</head>
-<body>
-    <h1> Hello {{name|capitalize}}  </h1>
-    <h2> This your First Page</h2>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Hello {{name|capitalize}}</title>
+    </head>
+    <body>
+        {% extends "base.html" %}
+        {% block content %}
+            <h1> Hello {{name|capitalize}}  </h1>
+            <h2> This your First Page</h2>
+        {% endblock %}
+    </body>
 </html>

@@ -1,15 +1,20 @@
+<!-- A 500 Internal Server ERROR Page -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>500 Internal Server Error</title>
-</head>
-<body>
-<div style="text-align: center;">
-    <h1>500</h1>
-    <p>Internal Server Error</p>
-    <a href="/">Go Back Home</a>
-</div>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>500 Internal Server Error</title>
+    </head>
+    <body>
+    {% extends "base.html" %}
+    {% block content %}
+    <div style="text-align: center;">
+        <h1>500</h1>
+        <p>Internal Server Error</p>
+        <a href="/">Go Back Home</a>   <!-- Link to return HomePage -->
+    </div>
+
+    {% endblock %}
+    </body>
 </html>
