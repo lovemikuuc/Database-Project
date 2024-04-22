@@ -12,9 +12,9 @@ body {
     width:600px;
     /* what is paddling doing
     padding is the space between the content and the border
-    */ 
+    */
     padding: 20px;
-    position: absolute;
+    position: relative;
     /* what are some other position values
     relative, fixed, absolute, static
     */
@@ -24,7 +24,7 @@ body {
     absolute: relative to its first positioned parent
     static: default value, not relative to anything
     */
-    top:70%;
+    top:350px;
     left:35%;
     transform:translate(-50%,-50%);
     color:black;

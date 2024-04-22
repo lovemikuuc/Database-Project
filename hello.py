@@ -297,14 +297,14 @@ def customer_accounts_data():
     return jsonify(accounts_list)
 
 
-# Main driver function for running the Flask application
-if __name__ == '__main__':
-    # app.run runs the application on a local server.
-    # Debug mode is used to provide useful error messages and enable reloader that restarts
-    # server whenever any changes are noticed in the scripts.
-    app.run(debug=True)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://diz21:InfSci2710_4600049@164.90.137.194:3306/mtc'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# # Main driver function for running the Flask application
+# if __name__ == '__main__':
+#     # app.run runs the application on a local server.
+#     # Debug mode is used to provide useful error messages and enable reloader that restarts
+#     # server whenever any changes are noticed in the scripts.
+#     app.run(debug=True)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://diz21:InfSci2710_4600049@164.90.137.194:3306/mtc'
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 '''
 db = SQLAlchemy(app)
 
@@ -453,8 +453,7 @@ def employee_accounts_data():
     # Use jsonify to convert list of dictionaries to JSON and return it
     return jsonify(accounts_list)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
 
 
 # Define a form for Program details
@@ -567,3 +566,7 @@ def device_programs_data():
 
     # Use jsonify to convert list of dictionaries to JSON and return it
     return jsonify(programs_list)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
