@@ -1,0 +1,73 @@
+<!-- Adding employee account page -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Employee Registration</title>
+    </head>
+    <body>
+        {% extends 'base.html'%}   <!-- 网页上方菜单栏引用，每个页面必须有    BAR Menu Reference -->
+        {% block content %}        <!-- Start From Here -->
+
+            {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+
+            <!-- If the Employee account is added or if username is not empty -->
+            {% if username %}
+                <h1> Employee Added  </h1>
+                <h2> You can keep Adding Employee</h2>
+            {% else %} <!-- First time Entry, no cache or value in username -->
+                <h1> Register new Employee account here </h1>
+            {% endif %}
+                <br/>
+            <!-- 这个block是提交信息的框  -->
+                <!-- border style  -->
+                <div class="shadow p-3 mb-5 bg-body rounded"> <!-- 外观代码 -->
+                    <form method='POST'>
+                        {{ form.hidden_tag() }} <!-- CRSF security token -->
+                        {{ form.employeeAccount.label(class="form-label") }} <!-- Label for the Employee Account field -->
+                        {{ form.employeeAccount(class="form-control") }} <!-- Employee Account Input field -->
+                        <br/>
+                        {{ form.employeePassword.label(class="form-label") }} <!-- Label for the Employee Password field -->
+                        {{ form.employeePassword(class="form-control") }} <!-- Employee password Input field -->
+                        <br/>
+                        {{ form.submit(class="btn btn-secondary")}} <!-- Submit button -->
+                    </form>
+                </div>
+                <br/><br/><br/>
+            <!-- 这部分是网页下方表格， Table Displays existing data in the table  -->
+                <table class="table table-hover table-bordered table-striped">
+                    <!-- Header -->
+                    <tr>
+                        <th>employee_id</th>
+                        <th>username (Click Username to Change Login Credentials)</th>
+                        <th>password</th>
+                        <th>operation</th>
+                    </tr>
+                    <!-- For loop that displays each row of the data -->
+                    {% for existing_employeeAccount in existing_employeeAccounts %}
+                    <tr>
+                        <td>{{ existing_employeeAccount.employee_id }}</td>
+                        <td><a href = "{{url_for('updateEmployeeAccount', id=existing_employeeAccount.employee_id)}}">{{ existing_employeeAccount.username }}</a></td>
+                        <td>{{ existing_employeeAccount.password }}</td>
+                        <!-- A button for delete -->                                                           <!-- Botton Name  -->
+                        <td><a href = "{{url_for('deleteEmployeeAccount', id=existing_employeeAccount.employee_id)}}">DELETE</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <!-- Create a Button that output json of the table -->
+            <button onclick="viewEmployeeAccountsJSON()" class="btn btn-primary">View Employee Accounts in JSON</button>
+            <script>
+                function viewEmployeeAccountsJSON() {
+                    // Redirects the user to the '/employeeAccount/data' route
+                    window.location.href = "{{ url_for('employee_accounts_data') }}";
+                }
+            </script>
+            <!-- ends -->
+        {% endblock %}
+    </body>
+</html>

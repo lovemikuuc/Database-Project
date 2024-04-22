@@ -1,0 +1,77 @@
+<!-- Adding Device Program page -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Add Device Program</title>
+    </head>
+    <body>
+        {% extends 'base.html'%}   <!-- 网页上方菜单栏引用，每个页面必须有    BAR Menu Reference -->
+        {% block content %}        <!-- Start From Here -->
+
+            {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+
+            <!-- If the program is added or if name is not empty -->
+            {% if username %}
+                <h1> Device Program Added  </h1>
+                <h2> You can keep Adding Device Programs</h2>
+            {% else %}
+                <h1> Register new Device Program here </h1>
+            {% endif %}
+                <br/>
+            <!-- 这个block是提交信息的框  -->
+                <!-- border style  -->
+                <div class="shadow p-3 mb-5 bg-body rounded"> <!-- 外观代码 -->
+                    <form method='POST'>
+                        {{ form.hidden_tag() }} <!-- CRSF security token -->
+                        {{ form.program_name.label(class="form-label") }}
+                        {{ form.program_name(class="form-control") }}
+                        <br/>
+                        {{ form.program_version.label(class="form-label") }}
+                        {{ form.program_version(class="form-control") }}
+                        <br/>
+                        {{ form.expiration_status.label(class="form-label") }}
+                        {{ form.expiration_status(class="form-control") }}
+                        <br/>
+                        {{ form.submit(class="btn btn-secondary")}}
+                    </form>
+                </div>
+                <br/><br/><br/>
+            <!-- 这部分是网页下方表格， Table Displays existing data in the table  -->
+                <table class="table table-hover table-bordered table-striped">
+                    <!-- Header -->
+                    <tr>
+                        <th>Program ID</th>
+                        <th>Program Name (Click name to edit program information)</th>
+                        <th>Program Version</th>
+                        <th>Expiration Status</th>
+                        <th>Operation</th>
+                    </tr>
+                    <!-- For loop that displays each row of the data -->
+                    {% for existing_program in existing_programs %}
+                    <tr>
+                        <td>{{ existing_program.program_id }}</td>
+                        <td><a href = "{{url_for('updateProgram', id=existing_program.program_id)}}">{{ existing_program.program_name }}</a></td>
+                        <td>{{ existing_program.program_version }}</td>
+                        <td>{{ existing_program.expiration_status }}</td>
+                        <!-- A button for delete -->                                                           <!-- Botton Name  -->
+                        <td><a href = "{{url_for('deleteProgram', id=existing_program.program_id)}}">DELETE</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <!-- Create a Button that output json of the table -->
+            <button onclick="viewDeviceProgramsJSON()" class="btn btn-primary">View Device Programs in JSON</button>
+            <script>
+                function viewDeviceProgramsJSON() {
+                    window.location.href = "{{ url_for('device_programs_data') }}";
+                }
+            </script>
+            <!-- ends -->
+        {% endblock %}
+    </body>
+</html>

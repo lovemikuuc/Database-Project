@@ -30,22 +30,33 @@
                     </ul>
                 </li>
 
-
                 <!-- Employee Accounts Management menu!!!!!!!! -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">Employee Accounts</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                                         <!-- Modify to "addEmployee , implement in hello.py -->
-                        <li><a class="dropdown-item" href="{{url_for('addCustomer')}}">Add Employee</a></li>
+                        <li><a class="dropdown-item" href="{{url_for('addEmployee')}}">Add Employee</a></li>
                                                         <!-- Modify to "updateEmployeeAccount , implement in hello.py -->
-                        <li><a class="dropdown-item" href="{{url_for('updateCustomerAccount', id = 0)}}">Update Credential</a></li>
+                        <li><a class="dropdown-item" href="{{url_for('updateEmployeeAccount', id = 0)}}">Update Credential</a></li>
                         <!-- <li><a class="dropdown-item" href="#">Another action</a></li>      -->
                         <li><hr class="dropdown-divider"></li>     <!-- 分隔线 -->
                         <!--<li><a class="dropdown-item" href="#">Something else here</a></li> -->
                     </ul>
                 </li>
 
-
+                <!-- Device Programs Management menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">Device Programs</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <!-- Modify to "addEmployee , implement in hello.py -->
+                        <li><a class="dropdown-item" href="{{url_for('addProgram')}}">Add Device Programs</a></li>
+                        <!-- Modify to "updateEmployeeAccount , implement in hello.py -->
+                        <li><a class="dropdown-item" href="{{url_for('updateProgram', id = 0)}}">Update Device Programs Information</a></li>
+                        <!-- <li><a class="dropdown-item" href="#">Another action</a></li>      -->
+                        <li><hr class="dropdown-divider"></li>     <!-- 分隔线 -->
+                        <!--<li><a class="dropdown-item" href="#">Something else here</a></li> -->
+                    </ul>
+                </li>
 
             </ul>
             <form class="d-flex">
