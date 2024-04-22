@@ -11,6 +11,7 @@ DROP VIEW IF EXISTS CustomerEmployeeView;
 DROP Procedure IF EXISTS PerformMaintenance;
 
 -- Drop tables
+DROP TABLE IF EXISTS customer_employee_link;
 DROP TABLE IF EXISTS employee_account_link;
 DROP TABLE IF EXISTS customer_account_link;
 DROP TABLE IF EXISTS `file`;
@@ -58,7 +59,7 @@ CREATE TABLE after_sales_analysis (
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
 CREATE TABLE employee (
-    employee_id INT PRIMARY KEY NOT NULL auto_increment,
+    employee_id INT PRIMARY KEY auto_increment,
     customer_id INT,
     employee_name VARCHAR(50),
     role VARCHAR(50),
@@ -68,7 +69,7 @@ CREATE TABLE employee (
 );
 
 CREATE TABLE customer_account_link (
-    link_id INT PRIMARY KEY AUTO_INCREMENT,
+    link_id INT PRIMARY KEY AUTO_INCREMENT auto_increment,
     customer_id INT NOT NULL,
     account_id INT NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
@@ -76,29 +77,37 @@ CREATE TABLE customer_account_link (
 );
 
 CREATE TABLE employee_account_link (
-    link_id INT PRIMARY KEY AUTO_INCREMENT,
+    link_id INT PRIMARY KEY AUTO_INCREMENT auto_increment,
     employee_id INT NOT NULL,
     account_id INT NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
     FOREIGN KEY (account_id) REFERENCES employee_account(employee_id)
 );
 
+CREATE TABLE customer_employee_link (
+    link_id INT PRIMARY KEY AUTO_INCREMENT auto_increment,
+    customer_id INT NOT NULL,
+    employee_id INT NOT NULL,
+    FOREIGN KEY (customer_id) REFERENCES customer_account_link(customer_id),
+    FOREIGN KEY (employee_id) REFERENCES employee_account_link(employee_id)
+);
+
 CREATE TABLE training (
-    training_id INT PRIMARY KEY,
+    training_id INT PRIMARY KEY auto_increment,
     training_content TEXT,
     upload_time DATETIME,
     training_type VARCHAR(255)
 );
 
 CREATE TABLE maintenance_info (
-    maintenance_info_id INT PRIMARY KEY,
+    maintenance_info_id INT PRIMARY KEY auto_increment,
     maintenance_type VARCHAR(255),
     maintenance_time DATETIME,
     notes TEXT
 );
 
 CREATE TABLE project (
-    project_id INT PRIMARY KEY,
+    project_id INT PRIMARY KEY auto_increment,
     customer_id INT,
     project_name VARCHAR(255),
     project_status VARCHAR(255),
@@ -106,7 +115,7 @@ CREATE TABLE project (
 );
 
 CREATE TABLE production_info (
-    production_info_id INT PRIMARY KEY,
+    production_info_id INT PRIMARY KEY auto_increment,
     project_id INT,
     output VARCHAR(255),
     runtime INT,
@@ -115,14 +124,14 @@ CREATE TABLE production_info (
 );
 
 CREATE TABLE device_program (
-    program_id INT PRIMARY KEY AUTO_INCREMENT,
+    program_id INT PRIMARY KEY auto_increment,
     program_name VARCHAR(255),
     program_version VARCHAR(255),
     expiration_status VARCHAR(255)
 );
 
 CREATE TABLE production_records (
-    production_records_id INT PRIMARY KEY,
+    production_records_id INT PRIMARY KEY auto_increment,
     project_id INT,
     issue_description VARCHAR(255),
     status VARCHAR(255),
@@ -131,7 +140,7 @@ CREATE TABLE production_records (
 );
 
 CREATE TABLE device (
-    device_id INT PRIMARY KEY,
+    device_id INT PRIMARY KEY auto_increment,
     project_id INT,
     production_records_id INT,
     production_info_id INT,
@@ -152,7 +161,7 @@ CREATE TABLE device (
 );
 
 CREATE TABLE file (
-    file_id INT PRIMARY KEY,
+    file_id INT PRIMARY KEY auto_increment,
     device_id INT,
     file_name VARCHAR(255),
     file_type VARCHAR(255),
@@ -162,20 +171,32 @@ CREATE TABLE file (
 
 
 -- Insert sample data into tables
+use mtc;
+INSERT INTO customer_account (username, `password`)
+VALUES ('zhoudingzhi', '123456789'),
+	   ('Chenyang', 'I Love You'),
+       ('Dmitriy', 'You Love DB');
 
-INSERT INTO customer (customer_id, contact_person, company_name, contact_info) VALUES
-(1, 'Xiaocheng Ma', 'Emerson', 'xiaocheng.ma@emerson.com'),
-(2, 'Jane Smith', 'Siemens', 'jane.smith@siemens.com'),
-(3, 'Michael Johnson', 'GE', 'michael.johnson@ge.com'),
-(4, 'Emily Davis', 'ABB', 'emily.davis@abb.com'),
-(5, 'Chris Wilson', 'Westinghouse', 'chris.wilson@westinghouse.com');
+INSERT INTO employee_account(username,  `password`)
+VALUES ('alexfj6', 'password123' ),
+	   ('EmmaT462', 'abc123'),
+       ('SarahA3g','gepwd');
 
-INSERT INTO employee (employee_id, customer_id, employee_name, role, password, permissions_access) VALUES
-(1, 1, 'Alex Brown', 'Engineer', 'password123', 'admin'),
-(2, 1, 'Emma Lee', 'Technician', 'abc123', 'limited'),
-(3, 2, 'Mark Johnson', 'Manager', 'pass1234', 'admin'),
-(4, 3, 'Sarah Miller', 'Analyst', 'gepwd', 'limited'),
-(5, 4, 'Ryan Davis', 'Supervisor', 'abbpass', 'admin');
+
+
+INSERT INTO customer (contact_person, company_name, contact_info) VALUES
+('Xiaocheng', 'Emerson', 'xiaocheng.ma@emerson.com'),
+('Jane', 'Siemens', 'jane.smith@siemens.com'),
+('Michael', 'GE', 'michael.johnson@ge.com'),
+('Emily', 'ABB', 'emily.davis@abb.com'),
+('Chris', 'Westinghouse', 'chris.wilson@westinghouse.com');
+
+INSERT INTO employee (customer_id, employee_name, role, password, permissions_access) VALUES
+(1, 'Alex', 'Engineer', 'password123', 'admin'),
+(1, 'Emma', 'Technician', 'abc123', 'limited'),
+(2, 'Mark', 'Manager', 'pass1234', 'admin'),
+( 3, 'Sarah', 'Analyst', 'gepwd', 'limited'),
+( 4, 'Ryan', 'Supervisor', 'abbpass', 'admin');
 
 INSERT INTO after_sales_analysis (analysis_id, customer_id, after_sales_person_id, processing_time, customer_satisfaction) VALUES
 (1, 1, 1, '2024-03-15 08:30:00', 'Satisfied'),
