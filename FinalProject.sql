@@ -51,7 +51,7 @@ CREATE TABLE customer (
     contact_info VARCHAR(255)
 );
 CREATE TABLE after_sales_analysis (
-    analysis_id INT PRIMARY KEY,
+    analysis_id INT NOT NULL PRIMARY KEY,
     customer_id INT,
     after_sales_person_id INT,
     processing_time DATETIME,
@@ -59,7 +59,7 @@ CREATE TABLE after_sales_analysis (
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
 CREATE TABLE employee (
-    employee_id INT PRIMARY KEY auto_increment,
+    employee_id INT PRIMARY KEY NOT NULL auto_increment,
     customer_id INT,
     employee_name VARCHAR(50),
     role VARCHAR(50),
@@ -69,7 +69,7 @@ CREATE TABLE employee (
 );
 
 CREATE TABLE customer_account_link (
-    link_id INT PRIMARY KEY AUTO_INCREMENT auto_increment,
+    link_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT ,
     customer_id INT NOT NULL,
     account_id INT NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
@@ -77,7 +77,7 @@ CREATE TABLE customer_account_link (
 );
 
 CREATE TABLE employee_account_link (
-    link_id INT PRIMARY KEY AUTO_INCREMENT auto_increment,
+    link_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT ,
     employee_id INT NOT NULL,
     account_id INT NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
@@ -85,7 +85,7 @@ CREATE TABLE employee_account_link (
 );
 
 CREATE TABLE customer_employee_link (
-    link_id INT PRIMARY KEY AUTO_INCREMENT auto_increment,
+    link_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT ,
     customer_id INT NOT NULL,
     employee_id INT NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES customer_account_link(customer_id),
@@ -93,21 +93,21 @@ CREATE TABLE customer_employee_link (
 );
 
 CREATE TABLE training (
-    training_id INT PRIMARY KEY auto_increment,
+    training_id INT PRIMARY KEY NOT NULL auto_increment,
     training_content TEXT,
     upload_time DATETIME,
     training_type VARCHAR(255)
 );
 
 CREATE TABLE maintenance_info (
-    maintenance_info_id INT PRIMARY KEY auto_increment,
+    maintenance_info_id INT PRIMARY KEY NOT NULL auto_increment,
     maintenance_type VARCHAR(255),
     maintenance_time DATETIME,
     notes TEXT
 );
 
 CREATE TABLE project (
-    project_id INT PRIMARY KEY auto_increment,
+    project_id INT PRIMARY KEY NOT NULL auto_increment,
     customer_id INT,
     project_name VARCHAR(255),
     project_status VARCHAR(255),
@@ -115,7 +115,7 @@ CREATE TABLE project (
 );
 
 CREATE TABLE production_info (
-    production_info_id INT PRIMARY KEY auto_increment,
+    production_info_id INT PRIMARY KEY NOT NULL auto_increment,
     project_id INT,
     output VARCHAR(255),
     runtime INT,
@@ -124,14 +124,14 @@ CREATE TABLE production_info (
 );
 
 CREATE TABLE device_program (
-    program_id INT PRIMARY KEY auto_increment,
+    program_id INT PRIMARY KEY NOT NULL auto_increment,
     program_name VARCHAR(255),
     program_version VARCHAR(255),
     expiration_status VARCHAR(255)
 );
 
 CREATE TABLE production_records (
-    production_records_id INT PRIMARY KEY auto_increment,
+    production_records_id INT PRIMARY KEY NOT NULL auto_increment,
     project_id INT,
     issue_description VARCHAR(255),
     status VARCHAR(255),
@@ -140,7 +140,7 @@ CREATE TABLE production_records (
 );
 
 CREATE TABLE device (
-    device_id INT PRIMARY KEY auto_increment,
+    device_id INT PRIMARY KEY NOT NULL auto_increment,
     project_id INT,
     production_records_id INT,
     production_info_id INT,
@@ -161,7 +161,7 @@ CREATE TABLE device (
 );
 
 CREATE TABLE file (
-    file_id INT PRIMARY KEY auto_increment,
+    file_id INT PRIMARY KEY NOT NULL auto_increment,
     device_id INT,
     file_name VARCHAR(255),
     file_type VARCHAR(255),
