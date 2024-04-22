@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Device Program Details Update Page</title>
+    </head>
+    <body>
+    {% extends 'base.html'%}
+    {% block content %}
+
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+
+        {% if program_name %}
+            <h1> Device Program Details Updated  </h1>
+            <br/><br/><br/>
+            <table class="table table-hover table-bordered table-striped">
+                <!-- Header -->
+                <tr>
+                    <th>Program ID</th>
+                    <th>Program Name (Click name to edit program information)</th>
+                    <th>Program Version</th>
+                    <th>Expiration Status</th>
+                    <th>Operation</th>
+                </tr>
+                <!-- For loop that displays each row of the data -->
+                {% for existing_program in existing_programs %}
+                <tr>
+                    <td>{{ existing_program.program_id }}</td>
+                    <td><a href = "{{url_for('updateProgram', id=existing_program.program_id)}}">{{ existing_program.program_name }}</a></td>
+                    <td>{{ existing_program.program_version }}</td>
+                    <td>{{ existing_program.expiration_status }}</td>
+                    <!-- A button for delete -->                                                           <!-- Botton Name  -->
+                    <td><a href = "{{url_for('deleteProgram', id=existing_program.program_id)}}">DELETE</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+
+        {% else %}
+            <h1> Update Program Details Here </h1>
+            {% if id == 0 %}
+                <!-- do nothing here, just see the table-->
+            {% else %}
+                <h2> You are updating Program: {{ program_to_update.program_name}}</h2>
+                <br/>
+                <div class="shadow p-3 mb-5 bg-body rounded">
+                    <form action = "/DeviceProgram/update_{{id}}" method = 'POST'>
+                        {{ form.hidden_tag() }}
+
+                        {{ form.program_name.label(class="form-label") }}
+                        {{ form.program_name(class="form-control", value = program_to_update.program_name) }}
+                        <br/>
+                        {{ form.program_version.label(class="form-label") }}
+                        {{ form.program_version(class="form-control", value = program_to_update.program_version) }}
+                        <br/>
+                        {{ form.expiration_status.label(class="form-label") }}
+                        {{ form.expiration_status(class="form-control", value = program_to_update.expiration_status) }}
+                        <br/>
+                        <!-- submit button-->
+                        {{ form.submit(class="btn btn-secondary")}}
+                        <!-- delete button-->
+                        <a href="{{url_for('deleteProgram', id=id)}}" class="btn btn-danger">Delete</a>
+                    </form>
+                </div>
+            {% endif %}
+        <br/><br/><br/>
+        <!-- table setup-->
+        <table class="table table-hover table-bordered table-striped">
+            <!-- Header -->
+            <tr>
+                <th>Program ID</th>
+                <th>Program Name (Click name to edit program information)</th>
+                <th>Program Version</th>
+                <th>Expiration Status</th>
+                <th>Operation</th>
+            </tr>
+            <!-- For loop that displays each row of the data -->
+            {% for existing_program in existing_programs %}
+            <tr>
+                <td>{{ existing_program.program_id }}</td>
+                <td><a href = "{{url_for('updateProgram', id=existing_program.program_id)}}">{{ existing_program.program_name }}</a></td>
+                <td>{{ existing_program.program_version }}</td>
+                <td>{{ existing_program.expiration_status }}</td>
+                <!-- A button for delete -->                                                           <!-- Botton Name  -->
+                <td><a href = "{{url_for('deleteProgram', id=existing_program.program_id)}}">DELETE</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <button onclick="viewDeviceProgramsJSON()" class="btn btn-primary">View Device Programs in JSON</button>
+        <script>
+            function viewDeviceProgramsJSON() {
+                window.location.href = "{{ url_for('device_programs_data') }}";
+            }
+        </script>
+
+        {% endif %}
+    {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Employee Account Details Update Page</title>
+    </head>
+    <body>
+    {% extends 'base.html'%}
+    {% block content %}
+
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+
+        {% if username %}
+            <h1> Employee Account Details Updated  </h1>
+            <br/><br/><br/>
+            <table class="table table-hover table-bordered table-striped">
+                <tr>
+                    <th>employee_id</th>
+                    <th>username (Click Username to Change Login Credentials)</th>
+                    <th>password</th>
+                    <th>operation</th>
+                </tr>
+                {% for existing_employeeAccount in existing_employeeAccounts %}
+                <tr>
+                    <td>{{ existing_employeeAccount.employee_id }}</td>
+                    <td><a href = "{{url_for('updateEmployeeAccount', id=existing_employeeAccount.employee_id)}}">{{ existing_employeeAccount.username }}</a></td>
+                    <td>{{ existing_employeeAccount.password }}</td>
+                    <td><a href = "{{url_for('deleteEmployeeAccount', id=existing_employeeAccount.employee_id)}}">DELETE</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+
+        {% else %}
+            <h1> Update Account Details Here </h1>
+            {% if id == 0 %}
+                <!-- do nothing here, just see the table-->
+            {% else %}
+                <h2> You are updating Username: {{ name_to_update.username}}</h2>
+                <br/>
+                <div class="shadow p-3 mb-5 bg-body rounded">
+                    <form action = "/employeeAccount/update_{{id}}" method = 'POST'>
+                        {{ form.hidden_tag() }}
+
+                        {{ form.employeeAccount.label(class="form-label") }}
+                        {{ form.employeeAccount(class="form-control", value = name_to_update.username) }}
+                        <br/>
+                        {{ form.employeePassword.label(class="form-label") }}
+                        {{ form.employeePassword(class="form-control", value = name_to_update.password) }}
+                        <br/>
+                        {{ form.submit(class="btn btn-secondary")}} <!-- submit button-->
+                        <!-- delete button-->
+                        <a href="{{url_for('deleteEmployeeAccount', id=id)}}" class="btn btn-danger">Delete</a>
+                    </form>
+                </div>
+            {% endif %}
+        <br/><br/><br/>
+        <!-- table setup-->
+        <table class="table table-hover table-bordered table-striped">
+            <tr>
+                <th>employee_id</th>
+                <th>username (Click Username to Change Login Credentials)</th>
+                <th>password</th>
+                <th>operation</th>
+            </tr>
+            {% for existing_employeeAccount in existing_employeeAccounts %}
+                <tr>
+                    <td>{{ existing_employeeAccount.employee_id }}</td>
+                    <td> <a href = "{{url_for('updateEmployeeAccount', id=existing_employeeAccount.employee_id)}}">{{ existing_employeeAccount.username }}</a></td>
+                    <td>{{ existing_employeeAccount.password }}</td>
+                    <td><a href = "{{url_for('deleteEmployeeAccount', id=existing_employeeAccount.employee_id)}}">DELETE</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <button onclick="viewEmployeeAccountsJSON()" class="btn btn-primary">View Employee Accounts in JSON</button>
+        <script>
+            function viewEmployeeAccountsJSON() {
+                // Redirects the user to the '/employeeAccount/data' route
+                window.location.href = "{{ url_for('employee_accounts_data') }}";
+            }
+        </script>
+
+
+
+        {% endif %}
+
+    {% endblock %}
+    </body>
+</html>

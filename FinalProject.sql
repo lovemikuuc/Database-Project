@@ -35,7 +35,7 @@ CREATE TABLE customer_account(
 );
 
 CREATE TABLE employee_account(
-	employee_id INT PRIMARY KEY NOT NULL,
+	employee_id INT PRIMARY KEY NOT NULL auto_increment,
     username VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL
 );
@@ -58,7 +58,7 @@ CREATE TABLE after_sales_analysis (
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
 CREATE TABLE employee (
-    employee_id INT PRIMARY KEY,
+    employee_id INT PRIMARY KEY NOT NULL auto_increment,
     customer_id INT,
     employee_name VARCHAR(50),
     role VARCHAR(50),
@@ -115,7 +115,7 @@ CREATE TABLE production_info (
 );
 
 CREATE TABLE device_program (
-    program_id INT PRIMARY KEY,
+    program_id INT PRIMARY KEY AUTO_INCREMENT,
     program_name VARCHAR(255),
     program_version VARCHAR(255),
     expiration_status VARCHAR(255)

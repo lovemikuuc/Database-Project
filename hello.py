@@ -70,6 +70,15 @@ class CustomerAccountForm(FlaskForm):
     submit = SubmitField("Submit")
 
 
+# Define a form for employees to enter their account details
+class EmployeeAccountForm(FlaskForm):
+    # StringField represents <input type="text"> in HTML
+    # Validators ensure the fields are not submitted empty
+    # The employee account form has two fields - username and password
+    employeeAccount = StringField("Username:", validators=[DataRequired()])
+    employeePassword = PasswordField("Password:", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
 '''
 CustomerAccount is a class that inherits from db.Model, a base class for all models from Flask-SQLAlchemy. 
 This class defines several fields as class variables. The fields represent the columns of the corresponding
@@ -296,7 +305,7 @@ if __name__ == '__main__':
     app.run(debug=True)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://diz21:InfSci2710_4600049@164.90.137.194:3306/mtc'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+'''
 db = SQLAlchemy(app)
 
 
@@ -310,17 +319,17 @@ class CustomerAccountForm(FlaskForm):
     customerAccount = StringField("Username:", validators=[DataRequired()])
     customerPassword = StringField("Password:", validators=[DataRequired()])
     submit = SubmitField("Submit")
+'''
 
-
-class CustomerAccount(db.Model):
-    customer_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+class EmployeeAccount(db.Model):
+    employee_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
 
     #Create a String
     def __repr__(self):
         return '<Username: {}>'.format(self.username)
-
+'''
 # Create a route decorator
 @app.route('/')
 def index():
@@ -330,78 +339,78 @@ def index():
 @app.route('/user/<name>')
 def user(name):
     return render_template("user.html", name=name)
+'''
 
-
-@app.route('/customerAccount/add', methods=['GET', 'POST'])
-def addCustomer():
-    form = CustomerAccountForm()
+@app.route('/EmployeeAccount/add', methods=['GET', 'POST'])
+def addEmployee():
+    form = EmployeeAccountForm()
     username = None
     if form.validate_on_submit():
-        customer = CustomerAccount.query.filter_by(username = form.customerAccount.data).first()
-        if customer is None:
-            customer = CustomerAccount(username = form.customerAccount.data, password = form.customerPassword.data)
-            db.session.add(customer)
+        employee = EmployeeAccount.query.filter_by(username = form.employeeAccount.data).first()
+        if employee is None:
+            employee = EmployeeAccount(username = form.employeeAccount.data, password = form.employeePassword.data)
+            db.session.add(employee)
             db.session.commit()
-            username = form.customerAccount.data
+            username = form.employeeAccount.data
             # clear form
-            form.customerAccount.data = ''
-            form.customerPassword.data = ''
-            flash('Customer account has been created!')
-            return render_template("add_customer.html", form=form, username=username,
-                           existing_customerAccounts=CustomerAccount.query.order_by(CustomerAccount.customer_id).all())
+            form.employeeAccount.data = ''
+            form.employeePassword.data = ''
+            flash('Employee account has been created!')
+            return render_template("add_employee.html", form=form, username=username,
+                           existing_employeeAccounts=EmployeeAccount.query.order_by(EmployeeAccount.employee_id).all())
         else:
-            flash('Customer account already exists!')
-            return render_template("add_customer.html", form=form, username=username,
-                                   existing_customerAccounts=CustomerAccount.query.order_by(CustomerAccount.customer_id).all())
-    return render_template("add_customer.html", form=form, username=username,
-                           existing_customerAccounts=CustomerAccount.query.order_by(CustomerAccount.customer_id).all())
+            flash('Employee account already exists!')
+            return render_template("add_employee.html", form=form, username=username,
+                                   existing_employeeAccounts=EmployeeAccount.query.order_by(EmployeeAccount.employee_id).all())
+    return render_template("add_employee.html", form=form, username=username,
+                           existing_employeeAccounts=EmployeeAccount.query.order_by(EmployeeAccount.employee_id).all())
 
 
-@app.route('/customerAccount/update_<int:id>', methods=['GET', 'POST'])
-def updateCustomerAccount(id):
-    form = CustomerAccountForm()
+@app.route('/employeeAccount/update_<int:id>', methods=['GET', 'POST'])
+def updateEmployeeAccount(id):
+    form = EmployeeAccountForm()
 
     if id == 0:
-        username = form.customerAccount.data
-        return render_template("updateCustomerAccount.html", id=id, form=form, name_to_update = None,
-                               existing_customerAccounts=
-                               CustomerAccount.query.order_by(CustomerAccount.customer_id).all())
-    username_to_update = CustomerAccount.query.get_or_404(id)
+        username = form.employeeAccount.data
+        return render_template("updateEmployeeAccount.html", id=id, form=form, name_to_update = None,
+                               existing_employeeAccounts=
+                               EmployeeAccount.query.order_by(EmployeeAccount.employee_id).all())
+    username_to_update = EmployeeAccount.query.get_or_404(id)
 
     if request.method == "POST":
-        username_to_update.username = request.form['customerAccount']
-        username_to_update.password = request.form['customerPassword']
+        username_to_update.username = request.form['employeeAccount']
+        username_to_update.password = request.form['employeePassword']
 
         try:
             db.session.commit()
-            flash('Customer account details has been updated!')
-            return render_template("updateCustomerAccount.html", id = id,form=form, name_to_update=username_to_update,
-                                   existing_customerAccounts=CustomerAccount.query.order_by(CustomerAccount.customer_id).all())
+            flash('Employee account details has been updated!')
+            return render_template("updateEmployeeAccount.html", id = id,form=form, name_to_update=username_to_update,
+                                   existing_employeeAccounts=EmployeeAccount.query.order_by(EmployeeAccount.employee_id).all())
         except:
             flash("An Error Occurred! Looks like something went wrong!")
-            return render_template("updateCustomerAccount.html", id = id,form=form, name_to_update=username_to_update,
-                                   existing_customerAccounts=CustomerAccount.query.order_by(CustomerAccount.customer_id).all())
+            return render_template("updateEmployeeAccount.html", id = id,form=form, name_to_update=username_to_update,
+                                   existing_employeeAccounts=EmployeeAccount.query.order_by(EmployeeAccount.employee_id).all())
     else:
-        return render_template("updateCustomerAccount.html", id = id,form=form, name_to_update=username_to_update,
-                           existing_customerAccounts=CustomerAccount.query.order_by(CustomerAccount.customer_id).all())
+        return render_template("updateEmployeeAccount.html", id = id,form=form, name_to_update=username_to_update,
+                           existing_employeeAccounts=EmployeeAccount.query.order_by(EmployeeAccount.employee_id).all())
 
 
-@app.route('/customerAccount/delete_<int:id>', methods=['GET', 'POST'])
-def deleteCustomerAccount(id):
-    form = CustomerAccountForm()
-    username_to_delete = CustomerAccount.query.get_or_404(id)
+@app.route('/EmployeeAccount/delete_<int:id>', methods=['GET', 'POST'])
+def deleteEmployeeAccount(id):
+    form = EmployeeAccountForm()
+    username_to_delete = EmployeeAccount.query.get_or_404(id)
 
     try:
         db.session.delete(username_to_delete)
         db.session.commit()
-        flash('Customer account has been deleted!')
-        existing_customerAccounts = CustomerAccount.query.order_by(CustomerAccount.customer_id).all()
-        return render_template("deleteCustomerAccount.html", id = id,form=form, name_to_delete=username_to_delete,
-                               existing_customerAccounts=existing_customerAccounts)
+        flash('Employee account has been deleted!')
+        existing_EmployeeAccounts = EmployeeAccount.query.order_by(EmployeeAccount.employee_id).all()
+        return render_template("deleteEmployeeAccount.html", id = id,form=form, name_to_delete=username_to_delete,
+                               existing_EmployeeAccounts=existing_EmployeeAccounts)
     except:
         flash("Whoops! There was a problem deleting account!")
-        return render_template("deleteCustomerAccount.html", id = id,form=form, name_to_delete=username_to_delete,
-                               existing_customerAccounts=existing_customerAccounts)
+        return render_template("deleteEmployeeAccount.html", id = id,form=form, name_to_delete=username_to_delete,
+                               existing_EmployeeAccounts=existing_EmployeeAccounts)
 
 
 
@@ -415,7 +424,7 @@ def page_not_found(e):
 def internal_server_error(e):
     return render_template('500.html'), 500
 
-
+'''
 # Create Name Page
 @app.route('/login', methods=['GET', 'POST'])
 def name():
@@ -426,16 +435,16 @@ def name():
         form.name.data = ''
         flash('You have successfully logged in.', 'success')
     return render_template("name.html", form=form, name=name)
-
-@app.route('/customerAccount/data', methods=['GET'])
-def customer_accounts_data():
-    # Query all customer accounts
-    customer_accounts = CustomerAccount.query.all()
-    # Convert the customer account objects into a list of dictionaries for JSON conversion
+'''
+@app.route('/employeeAccount/data', methods=['GET'])
+def employee_accounts_data():
+    # Query all employee accounts
+    employee_accounts = EmployeeAccount.query.all()
+    # Convert the employee account objects into a list of dictionaries for JSON conversion
     accounts_list = []
-    for account in customer_accounts:
+    for account in employee_accounts:
         account_data = {
-            'customer_id': account.customer_id,
+            'employee_id': account.employee_id,
             'username': account.username,
             'password': account.password  # Be cautious about returning passwords; consider omitting this line
         }
@@ -446,3 +455,115 @@ def customer_accounts_data():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+# Define a form for Program details
+class DeviceProgramForm(FlaskForm):
+    # StringField represents <input type="text"> in HTML
+    # Validators ensure the fields are not submitted empty
+    # The DeviceProgram form has 3 fields - program_name, program_version and expiration_status
+    program_name = StringField("Program name:", validators=[DataRequired()])
+    program_version = StringField("Program version", validators=[DataRequired()])
+    expiration_status = StringField("Expiration Status", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+
+class DeviceProgram(db.Model):
+    program_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    program_name = db.Column(db.String(255), nullable=False)
+    program_version = db.Column(db.String(255), nullable=False)
+    expiration_status = db.Column(db.String(255), nullable=False)
+
+    #Create a String
+    def __repr__(self):
+        return '<Program name: {}>'.format(self.program_name)
+
+@app.route('/DeviceProgram/add', methods=['GET', 'POST'])
+def addProgram():
+    form = DeviceProgramForm()
+    program_name = None
+    if form.validate_on_submit():
+        program = DeviceProgram.query.filter_by(program_name = form.program_name.data).first()
+        if program is None:
+            program = DeviceProgram(program_name = form.program_name.data, program_version = form.program_version.data, expiration_status = form.expiration_status.data)
+            db.session.add(program)
+            db.session.commit()
+            program_name = form.program_name.data
+            # clear form
+            form.program_name.data = ''
+            form.program_version.data = ''
+            form.expiration_status.data = ''
+            flash('Program has been created!')
+            return render_template("add_program.html", form=form, program_name=program_name,
+                                   existing_programs=DeviceProgram.query.order_by(DeviceProgram.program_id).all())
+        else:
+            flash('Program already exists!')
+            return render_template("add_program.html", form=form, program_name=program_name,
+                                   existing_programs=DeviceProgram.query.order_by(DeviceProgram.program_id).all())
+    return render_template("add_program.html", form=form, program_name=program_name,
+                           existing_programs=DeviceProgram.query.order_by(DeviceProgram.program_id).all())
+
+
+@app.route('/DeviceProgram/update_<int:id>', methods=['GET', 'POST'])
+def updateProgram(id):
+    form = DeviceProgramForm()
+
+    if id == 0:
+        program_name = form.program_name.data
+        return render_template("updateProgram.html", id=id, form=form, program_to_update = None,
+                               existing_programs=DeviceProgram.query.order_by(DeviceProgram.program_id).all())
+    program_to_update = DeviceProgram.query.get_or_404(id)
+
+    if request.method == "POST":
+        program_to_update.program_name = request.form['program_name']
+        program_to_update.program_version = request.form['program_version']
+        program_to_update.expiration_status = request.form['expiration_status']
+
+        try:
+            db.session.commit()
+            flash('Device Program details has been updated!')
+            return render_template("updateProgram.html", id = id,form=form, program_to_update=program_to_update,
+                                   existing_programs=DeviceProgram.query.order_by(DeviceProgram.program_id).all())
+        except:
+            flash("An Error Occurred! Looks like something went wrong!")
+            return render_template("updateProgram.html", id = id,form=form, program_to_update=program_to_update,
+                                   existing_programs=DeviceProgram.query.order_by(DeviceProgram.program_id).all())
+    else:
+        return render_template("updateProgram.html", id = id,form=form, program_to_update=program_to_update,
+                               existing_programs=DeviceProgram.query.order_by(DeviceProgram.program_id).all())
+
+
+@app.route('/DeviceProgram/delete_<int:id>', methods=['GET', 'POST'])
+def deleteProgram(id):
+    form = DeviceProgramForm()
+    program_to_delete = DeviceProgram.query.get_or_404(id)
+
+    try:
+        db.session.delete(program_to_delete)
+        db.session.commit()
+        flash('Device Program has been deleted!')
+        existing_programs = DeviceProgram.query.order_by(DeviceProgram.program_id).all()
+        return render_template("deleteProgram.html", id = id,form=form, program_to_delete=program_to_delete,
+                               existing_programs=existing_programs)
+    except:
+        flash("Whoops! There was a problem deleting Device Program!")
+        return render_template("deleteProgram.html", id = id,form=form, program_to_delete=program_to_delete,
+                               existing_programs=existing_programs)
+
+@app.route('/DeviceProgram/data', methods=['GET'])
+def device_programs_data():
+    # Query all device programs
+    device_programs = DeviceProgram.query.all()
+    # Convert the device program objects into a list of dictionaries for JSON conversion
+    programs_list = []
+    for program in device_programs:
+        program_data = {
+            'program_id': program.program_id,
+            'program_name': program.program_name,
+            'program_version': program.program_version,
+            'expiration_status': program.expiration_status
+        }
+        programs_list.append(program_data)
+
+    # Use jsonify to convert list of dictionaries to JSON and return it
+    return jsonify(programs_list)
